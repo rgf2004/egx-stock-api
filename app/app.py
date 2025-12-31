@@ -1,7 +1,11 @@
-from flask import Flask
 import yfinance as yf
+from flask import Flask, render_template, send_from_directory, current_app
 
 app = Flask(__name__)
+
+@app.route('/')
+def home():
+    return render_template('index.html')
 
 @app.route('/EGX/<ticker>')
 def get_stock_price(ticker):
@@ -22,6 +26,15 @@ def get_stock_price(ticker):
 
     except Exception as e:
         return f"Error: {str(e)}", 500
+
+# Google Verification File Route
+@app.route('/google06da84292227ed11.html')
+def google_verification():
+    return render_template('google06da84292227ed11.html')
+
+@app.route('/googlef7033425e346341c.html')
+def google_verification():
+    return render_template('googlef7033425e346341c.html')
 
 if __name__ == '__main__':
     # Run on port 5000
