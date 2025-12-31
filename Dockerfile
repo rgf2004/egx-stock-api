@@ -10,13 +10,13 @@ COPY requirements.txt .
 # Install dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy your python script (assuming it's named app.py)
-COPY app.py .
+# Copy the entire 'app' directory contents into the container
+# This copies app.py, templates/, and static/ all at once
+COPY app/ .
 
 # Expose the port Flask runs on
 EXPOSE 5000
 
 # Run the application
-# We use --host=0.0.0.0 so it's accessible outside the container
+# Since app.py is now in the container's root (/app), we run it directly
 CMD ["python", "app.py"]
-
