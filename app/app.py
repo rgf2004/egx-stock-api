@@ -29,11 +29,11 @@ def get_stock_price(ticker):
 
 # Google Verification File Route
 @app.route('/google06da84292227ed11.html')
-def google_verification():
+def google_verification_1():
     return render_template('google06da84292227ed11.html')
 
 @app.route('/googlef7033425e346341c.html')
-def google_verification():
+def google_verification_2():
     return render_template('googlef7033425e346341c.html')
 
 if __name__ == '__main__':
