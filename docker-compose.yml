@@ -1,0 +1,6 @@
+
+services:
+  egx-stock-api:
+    image: "rgf2004/egx-stock-api"
+    ports:
+      - "${EXTERNAL_PORT:-5000}:5000" # Map external port (from env or defaults to 5000) to container port 5000
