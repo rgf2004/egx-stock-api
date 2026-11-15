@@ -1,3 +1,6 @@
+import re
+from threading import Lock
+
 import yfinance as yf
 from flask import Flask, render_template
 from cachetools import cached, TTLCache
@@ -7,6 +10,12 @@ app = Flask(__name__)
 
 # Cache with a TTL of 300 seconds (5 minutes) and a max size of 1024
 cache = TTLCache(maxsize=1024, ttl=300)
+cache_lock = Lock()
+
+# A ticker (ABUK) or an ISIN (EGS...): letters and digits only. Anything else is
+# rejected before it can reach Yahoo, so random input cannot bypass the cache
+# and cost two upstream requests per call.
+TICKER_RE = re.compile(r'^[A-Za-z0-9]{1,12}$')
 
 def fetch_stock_data_with_suffix(symbol):
     """Helper function to fetch stock data for a given symbol."""
@@ -41,7 +50,7 @@ def find_cairo_ticker_via_yf_search(query):
         return None
     return None
 
-@cached(cache)
+@cached(cache, lock=cache_lock)
 def get_price_for_ticker(ticker):
     """
     Main logic to fetch stock price.
@@ -73,6 +82,8 @@ def home():
 
 @app.route('/EGX/<ticker>')
 def get_stock_price(ticker):
+    if not TICKER_RE.fullmatch(ticker):
+        return "No Data Found", 404
     try:
         price = get_price_for_ticker(ticker)
         if price:
