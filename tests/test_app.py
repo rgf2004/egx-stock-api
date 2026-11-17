@@ -55,3 +55,10 @@ def test_falls_back_to_yahoo_when_tradingview_fails(client):
     r = client.get("/EGX/ABUK")
     assert r.get_data(as_text=True) == "77.46"
     assert client.calls == ["ABUK.CA"]
+
+
+def test_sitemap_lists_home(client):
+    r = client.get("/sitemap.xml")
+    assert r.status_code == 200
+    assert r.mimetype == "application/xml"
+    assert "<loc>https://stocks.one23.fyi/</loc>" in r.get_data(as_text=True)
