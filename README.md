@@ -1,5 +1,5 @@
 # EGX Stock API
-A simple Flask API to fetch Egyptian Exchange stock prices using `yfinance`.
+A simple Flask API to fetch Egyptian Exchange stock prices using TradingView's public scanner (15-minute delayed), with `yfinance` (end-of-day) as a fallback.
 
 ## How to Run (Local)
 1. `pip install -r requirements.txt`
