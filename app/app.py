@@ -3,7 +3,9 @@ from threading import Lock
 
 import requests
 import yfinance as yf
-from flask import Flask, render_template
+from datetime import date
+
+from flask import Flask, Response, render_template
 from cachetools import cached, TTLCache
 from yfinance import Search
 
@@ -121,6 +123,17 @@ def get_stock_price(ticker):
             return "No Data Found", 404
     except Exception as e:
         return "An error occurred while fetching data.", 500
+
+@app.route('/sitemap.xml')
+def sitemap():
+    xml = (
+        '<?xml version="1.0" encoding="UTF-8"?>\n'
+        '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
+        '  <url><loc>https://stocks.one23.fyi/</loc>'
+        f'<lastmod>{date.today().isoformat()}</lastmod></url>\n'
+        '</urlset>\n'
+    )
+    return Response(xml, mimetype='application/xml')
 
 # Google Verification File Routes
 @app.route('/google06da84292227ed11.html')
